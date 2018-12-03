@@ -69,3 +69,14 @@ write_rds(all, path = "finalproject/la_ct.rds")
 la %>% 
   ggplot(aes(x = total_population, y = average_household_size, color = median_age)) + geom_point() + labs(title = "Population in LA and Average Household Size, using zipcode data", subtitle = "As people get older they have a smaller household size", x = "Population per Zipcode", y = "Average Household Size", color = "Median Age per Zipode")
 ```
+
+```{r}
+leaflet(options = 
+            leafletOptions(dragging = FALSE,
+                           minZoom = 6, 
+                           maxZoom = 12))  %>% 
+     addProviderTiles("CartoDB")  %>% 
+     setView(lng = -118.2437, lat = 34.0522, zoom = 9)
+```
+
+

@@ -9,7 +9,7 @@
 
 library(shiny)
 library(fs)
-all <- read_rds("la_ct.rds")
+all <- readRDS("la_ct.rds")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
