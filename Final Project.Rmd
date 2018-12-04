@@ -51,7 +51,7 @@ names(city_ct)[names(city_ct)=="RegionName"] <- "City"
 ```
 
 ##Bringing Data together
-```{r}
+```{r, echo=FALSE, warning= FALSE, error= FALSE, message= FALSE}
 losangeles <- left_join(la, zipcodes_la, by = "zipcode", copy = FALSE) %>% 
   drop_na("2010-12") %>% 
   mutate(state = "CA")
@@ -70,7 +70,7 @@ la %>%
   ggplot(aes(x = total_population, y = average_household_size, color = median_age)) + geom_point() + labs(title = "Population in LA and Average Household Size, using zipcode data", subtitle = "As people get older they have a smaller household size", x = "Population per Zipcode", y = "Average Household Size", color = "Median Age per Zipode")
 ```
 
-```{r}
+```{r, echo=FALSE, warning= FALSE, error= FALSE, message= FALSE}
 leaflet(options = 
             leafletOptions(dragging = FALSE,
                            minZoom = 6, 
