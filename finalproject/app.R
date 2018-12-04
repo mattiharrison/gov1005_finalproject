@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyjs)
 library(fs)
 library(tidyverse)
 library(stringr)
@@ -12,21 +13,17 @@ library(scales)
 data <- readRDS("la_ct.rds")
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
-  
-  # Application title
-  titlePanel("Population and the effect on Housing in LA and Connecticut"),
+ui <- navbarPage("Population and its Effect on Single-Family Home Prices in LA and Connecticut", theme = shinytheme("flatly"),
     
     # Show a plot of the generated distribution
-    mainPanel(
+   mainPanel(
       
-      tabsetPanel(type = "tabs",
-                  tabPanel("Summary", htmlOutput("summary")),
-                  tabPanel("Graphs", plotlyOutput("graphs")),
-                  tabPanel("Models", plotlyOutput("models")),
-                  tabPanel("Insights", plotOutput("insights")))
+    tabsetPanel(type = "tabs",
+                 tabPanel("Summary", htmlOutput("summary")),
+                 tabPanel("Graphs", plotlyOutput("graph")),
+                 tabPanel("Models", plotlyOutput("models")),
+                 tabPanel("Insights", htmlOutput("insights")))
     ))
-
 
 # Define server logic required to draw a histogram
 server <- function(input, output) { 
@@ -39,15 +36,18 @@ server <- function(input, output) {
     str4  <- paste("Click through the tabs to see the data in different ways and use the drop-down menus to go between different characteristics.")
     str5  <- paste("How to read the graphs")
     str6  <- paste("??????")
-    str7  <- paste("Sources")
-    str8  <- paste("Census data was provided by Data.gov and home prices were from Zillow. https://catalog.data.gov/dataset/2010-census-populations-by-zip-code https://catalog.data.gov/dataset/2010-population-by-town https://www.zillow.com/research/data/")
-    str9  <- paste("Notes")
-    str10 <- paste("The data had to be cleaned to be merged by zipcode. Zipcodes with 0 as a population were removed from the dataset. Home prices were selected from December of 2012 to keep it consistent across economic policies such as interest rates and recovery from the Great Recession.")
+    str7  <- paste("Notes")
+    str8  <- paste("The data had to be cleaned to be merged by zipcode. Zipcodes with 0 as a population were removed from the dataset. Home prices were selected from December of 2012 to keep it consistent across economic policies such as interest rates and recovery from the Great Recession.")
+    str9  <- paste("Sources")
+    str10 <- paste("Census data was provided by Data.gov and home prices were from Zillow, specifically single-family homes. 
+                   https://catalog.data.gov/dataset/2010-census-populations-by-zip-code, 
+                   https://catalog.data.gov/dataset/2010-population-by-town,
+                   https://www.zillow.com/research/data/")
     
     HTML(paste(h3(str1), p(str2), h3(str3), p(str4), h3(str5), p(str6), h3(str7), p(str8), h3(str9), p(str10)))
   })
   
-  output$graphs <- renderPlot({
+  output$graph <- renderPlotly({
     data %>% 
       ggplot(aes(x = total_population, 
                  y = average_household_size, 
@@ -60,7 +60,7 @@ server <- function(input, output) {
            color = "Median Age per Zipode")
   })
   
-  output$models <- renderPlot({
+  output$models <- renderPlotly({
     specific %>% 
       ggplot(aes_string(x = input$characteristic, color = input$characteristic)) + geom_bar() + 
       coord_polar("y", start=0) + ggtitle("New Jersey District 3, by characteristic")
