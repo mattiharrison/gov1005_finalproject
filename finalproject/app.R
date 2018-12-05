@@ -1,64 +1,14 @@
 library(shiny)
-library(shinyjs)
 library(fs)
 library(tidyverse)
-library(stringr)
-library(ggplot2)
-library(janitor)
-library(rsconnect)
-library(shinythemes)
 library(plotly)
-library(scales)
+library(shinythemes)
+library(leaflet)
 
 data <- readRDS("la_ct.rds")
 
-##LA population
-plot_1 <- all %>% 
-  ggplot(aes(x = zipcode, y = total_population)) + geom_col() + theme(axis.text.x = element_blank()) + 
-  labs(title = "Populations in Specific LA areas", x = "", y = "Population")
-#LA prices 
-plot_2 <- all %>%
-  ggplot(aes(x = zipcode, y = x2010_12_x)) + geom_col() + theme(axis.text.x = element_blank()) + 
-  labs(title = "Prices for Single Family Homes in LA", x = "", y = "Home Prices")
-
-##CT population
-plot_3 <- all %>% 
-  ggplot(aes(x = city, y = population)) + geom_col() + theme(axis.text.x = element_blank()) + 
-  labs(title = "Populations in Connecticut cities", x = "", y = "Population")
-#CT prices
-plot_4 <- all %>%
-  ggplot(aes(x = city, y = x2010_12_y)) + geom_col() + theme(axis.text.x = element_blank()) + 
-  labs(title = "Prices for Single Family Homes in CT", x = "", y = "Home Prices")
-
-#Population and household size in LA, depending on age
-##Population density for LA
-plot_5 <- all %>% 
-  ggplot(aes(x = total_population, y = average_household_size, color = median_age)) + geom_point() + labs(title = "As the Population in an LA zipcode increases, the household size increases", subtitle = "As people get older they have a smaller household size", x = "Population per Zipcode", y = "Average Household Size", color = "Median Age per Zipode")
-
-#Population and number of open houses, added pricing of homes
-##does population correspond to more vacant homes
-plot_6 <- all %>%
-  ggplot(aes(x = population, y = vacant_housing_units , color = x2010_12_y)) + geom_point() +
-  labs(title = "As the population increases, the number of vacant homes increases in CT", 
-       x = "Population", y = "Vacant Homes", color = "Home Prices")
-
-#Population and home prices in LA, colored by average home size
-plot_7 <- all %>%
-  ggplot(aes(x = total_population, y = x2010_12_x, color = average_household_size)) + 
-  geom_point() +
-  labs(title = "As population in LA zipcodes increase, the home prices decrease", 
-       subtitle = "The most expensive homes have the smallest household size.",
-       x = "Population", y = "Home Prices", color = "Average household size")
-
-#Population and home prices in CT, colored by total number of homes
-plot_8 <- all %>%
-  ggplot(aes(x = population, y = x2010_12_y, color = total_housing_units)) + geom_point() +
-  labs(title = "As population in CT towns increases, the home prices decrease",
-       subtitle = "As population increases the total number of available homes increases",
-       x = "Population", y = "Home Prices", color = "Total houses")
-
 # Define UI for application that draws a histogram
-ui <- navbarPage("Population and its Effect on Single-Family Home Prices in LA and Connecticut", theme = shinytheme("sandstone"),
+ui <- navbarPage("Population and its Effect on Single-Family Home Prices in LA and Connecticut", theme = shinytheme("flatly"),
     
     # Show a plot of the generated distribution
    mainPanel(
@@ -80,7 +30,7 @@ ui <- navbarPage("Population and its Effect on Single-Family Home Prices in LA a
                                           "Populations and Corresponding Home Prices in CT cities" = "plot_8"),
                               selected = "plot_1"
                             ))),
-                 tabPanel("Models", plotlyOutput("models")),
+                 tabPanel("Models", leafletOutput("models")),
                  tabPanel("Insights", htmlOutput("insights")))
     ))
 
@@ -113,7 +63,7 @@ server <- function(input, output) {
     
   })
   
-  output$models <- ???????({
+  output$models <- renderLeaflet({
     leaflet(options = 
               leafletOptions(dragging = FALSE,
                              minZoom = 6, 
@@ -125,17 +75,17 @@ server <- function(input, output) {
   
   output$insights <- renderUI({
     
-    str1 <- paste("Summary")
-    str2 <- paste("This app shows the interviewees that Upshot used in their poll.")
-    str3 <- paste("Instructions") 
-    str4 <- paste("Click through the tabs to see the data in different ways and use the drop-down menu to go between different characteristics.")
-    str5 <- paste("How to read the graphs")
-    str6 <- paste("The first plot is a bar graph of the total interviews that Upshot conducted to create their data source.  This includes all states and districts. 
-                  The graphs shows that they interviewed white people above 65 the most, this could potentially have created a bias dataset from the beginning.
-                  The pie chart just shows New Jersey's 3rd district.  The graph is by count, not percentage, so the full circles were the most frequent.  In this case
-                  the most interviewed people were white and between 50 and 64.  This shows the lack of diversity in the polling data and shows the discrepency in US polling data.
-                  New Jersey's 3rd district demographics show that the district is much younger with an average age of 43, but it is 75% white.  This shows that the aging variable
-                  could lead to bias, but race/ethnicity bias is not present.")
+    str1 <- paste("Los Angeles")
+    str2 <- paste("As population size for a specific zipcode increases, the household size increases, but as people get older their household size shrinks.  
+                  This makes sense, children are leaving their parents homes and moving to homes with roommates or their families. As population increases, the price of homes decreases. 
+                  This also makes sense because more homes have to fit in a smaller area to accomidate for the large population. Specifically the most expensive homes have the smallest number of occupants.")
+    str3 <- paste("Connecticut") 
+    str4 <- paste("As population increases in Connecticut, the more number of vacant homes there are in those specific cities. 
+                  One reason for this is that companies are developing the city, thinking that even more people are going to move there. 
+                  They are being preemptive in their business decisions. As the population increases, the prices of homes decrease.")
+    str5 <- paste("Relating the Areas")
+    str6 <- paste("In both LA and all of Connecticut, as the population increases, the prices of homes decrease. The communities have to accomodate the growing proportion of people relative to the total space of the community.
+                  Other reasons for this include the age of the areas, the average number of households, and specific jobs that are offered in those communities. ")
     
     HTML(paste(h3(str1), p(str2), h3(str3), p(str4), h3(str5), p(str6)))})
 }

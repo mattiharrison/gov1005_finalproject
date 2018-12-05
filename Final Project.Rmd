@@ -69,35 +69,37 @@ write_rds(all, path = "finalproject/la_ct.rds")
 ```
 
 ```{r, echo=FALSE, warning= FALSE, error= FALSE, message= FALSE}
-
-##LA 
+##LA population
 all %>% 
   ggplot(aes(x = zipcode, y = total_population)) + geom_col() + theme(axis.text.x = element_blank()) + 
   labs(title = "Populations in Specific LA areas", x = "", y = "Population")
-
+#LA prices 
 all %>%
   ggplot(aes(x = zipcode, y = x2010_12_x)) + geom_col() + theme(axis.text.x = element_blank()) + 
   labs(title = "Prices for Single Family Homes in LA", x = "", y = "Home Prices")
 
-##CT
+##CT population
 all %>% 
   ggplot(aes(x = city, y = population)) + geom_col() + theme(axis.text.x = element_blank()) + 
   labs(title = "Populations in Connecticut cities", x = "", y = "Population")
-
+#CT prices
 all %>%
   ggplot(aes(x = city, y = x2010_12_y)) + geom_col() + theme(axis.text.x = element_blank()) + 
   labs(title = "Prices for Single Family Homes in CT", x = "", y = "Home Prices")
 
-
-
+#Population and household size in LA, depending on age
+##Population density for LA
 all %>% 
   ggplot(aes(x = total_population, y = average_household_size, color = median_age)) + geom_point() + labs(title = "As the Population in an LA zipcode increases, the household size increases", subtitle = "As people get older they have a smaller household size", x = "Population per Zipcode", y = "Average Household Size", color = "Median Age per Zipode")
 
+#Population and number of open houses, added pricing of homes
+##does population correspond to more vacant homes
 all %>%
   ggplot(aes(x = population, y = vacant_housing_units , color = x2010_12_y)) + geom_point() +
   labs(title = "As the population increases, the number of vacant homes increases in CT", 
        x = "Population", y = "Vacant Homes", color = "Home Prices")
 
+#Population and home prices in LA, colored by average home size
 all %>%
   ggplot(aes(x = total_population, y = x2010_12_x, color = average_household_size)) + 
   geom_point() +
@@ -105,12 +107,12 @@ all %>%
        subtitle = "The most expensive homes have the smallest household size.",
        x = "Population", y = "Home Prices", color = "Average household size")
 
+#Population and home prices in CT, colored by total number of homes
 all %>%
   ggplot(aes(x = population, y = x2010_12_y, color = total_housing_units)) + geom_point() +
   labs(title = "As population in CT towns increases, the home prices decrease",
        subtitle = "As population increases the total number of available homes increases",
        x = "Population", y = "Home Prices", color = "Total houses")
-  
 
 ```
 
