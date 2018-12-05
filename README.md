@@ -7,7 +7,7 @@ How does the census effect how developers are going to act in their new projects
 
 2.	Motivation
 
-The population is constantly growing, but I am still wondering how people afford homes. I wanted to see this relationship between population and home prices to see how the two varaibles are interacting.
+The population is constantly growing, but I am still wondering how people afford homes. I wanted to see this relationship between population and home prices to see how the two variables are interacting.
 
 3.	Background Info
 
