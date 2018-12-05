@@ -15,7 +15,7 @@ I used Los Angeles and Connecticut because I wanted to compare the east and west
 
 4.	Summary
 
-As population increases, home prices decrease. There also seemes to be more vacant homes when the population increases. Developers are responding to the influx of people. They also may be trying to make homes more affordable so more people can buy. Another relationship shows that as prices increase the average number of people living in a household decreases. This shows increasing inequality, the most expensive ares have the least number of people living in them, or that people are not moving to those places because they can't afford them.  
+As population increases, home prices decrease. There also seems to be more vacant homes when the population increases. Developers are responding to the influx of people. They also may be trying to make homes more affordable so more people can buy. Another relationship shows that as prices increase the average number of people living in a household decreases. This shows increasing inequality, the most expensive ares have the least number of people living in them, or that people are not moving to those places because they can't afford them.  
 
 5. Shiny
 
